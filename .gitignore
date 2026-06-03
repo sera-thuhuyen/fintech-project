@@ -216,3 +216,45 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# -----------------------------------------------------------------------------
+# Fintech analytics project
+# -----------------------------------------------------------------------------
+
+# Local generated data outputs.
+# Source Excel files in fin_data/ are intentionally not ignored so the project
+# can be reproduced from the original dataset.
+fin_data/processed/*
+!fin_data/processed/.gitkeep
+fin_data/profiling/*
+!fin_data/profiling/.gitkeep
+
+# Generated reports, logs, and exports.
+artifacts/*
+!artifacts/.gitkeep
+*.log
+
+# dbt generated files and installed packages.
+dbt/**/target/
+dbt/**/logs/
+dbt/**/dbt_packages/
+dbt/**/package-lock.yml
+dbt/**/profiles.yml
+
+# Cloud credentials and local config secrets.
+*.json.key
+*service-account*.json
+*gcp*credentials*.json
+.application-default-credentials.json
+config/*.local.*
+config/*secret*
+config/*credential*
+
+# Power BI temporary/cache files. Keep .pbix files trackable for the portfolio.
+dashboards/powerbi/*.tmp
+dashboards/powerbi/*.bak
+dashboards/powerbi/*~
+
+# OS/editor noise.
+.DS_Store
+Thumbs.db
