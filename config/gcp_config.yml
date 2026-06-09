@@ -1,0 +1,16 @@
+﻿gcp:
+  project_id: ecommerce-project-498012
+  bucket_name: sera-fintech-bucket
+  raw_csv_prefix: raw/csv
+  raw_dataset: fintech_raw
+  credentials_path: config/service-account.example.json
+
+local:
+  processed_data_dir: fin_data/processed
+  upload_files:
+    - country_flags.csv
+    - departments.csv
+    - employees.csv
+    - milestones.csv
+    - projects.csv
+    - tasks.csv

@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: stg_projects
+    description: Cleaned project records with typed date, budget, location, risk, and completion fields.
+    columns:
+      - name: project_id
+        tests: [not_null, unique]
+      - name: department_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_departments')
+                field: department_id
+      - name: project_manager_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
+  - name: stg_tasks
+    description: Cleaned task records with typed planned and actual hours.
+    columns:
+      - name: task_id
+        tests: [not_null, unique]
+      - name: project_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_projects')
+                field: project_id
+      - name: assigned_to_employee_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
+  - name: stg_milestones
+    description: Cleaned milestone records with parsed planned and actual completion dates.
+    columns:
+      - name: milestone_id
+        tests: [not_null, unique]
+      - name: project_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_projects')
+                field: project_id
+  - name: stg_employees
+    description: Cleaned employee records with typed coordinates and hourly rate.
+    columns:
+      - name: employee_id
+        tests: [not_null, unique]
+      - name: department_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_departments')
+                field: department_id
+  - name: stg_departments
+    description: Cleaned department lookup table.
+    columns:
+      - name: department_id
+        tests: [not_null, unique]
+  - name: stg_country_flags
+    description: Cleaned country flag lookup table.
+    columns:
+      - name: alpha_code
+        tests: [not_null, unique]
