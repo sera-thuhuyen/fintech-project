@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: dim_department
+    description: Department dimension for project, employee, and performance analysis.
+    columns:
+      - name: department_id
+        tests: [not_null, unique]
+
+  - name: dim_project
+    description: Project dimension with product, ownership, location, status, risk, and timeline attributes.
+    columns:
+      - name: project_id
+        tests: [not_null, unique]
+      - name: department_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_department')
+                field: department_id
+
+  - name: dim_employee
+    description: Employee dimension with department, role, experience, location, and hourly rate attributes.
+    columns:
+      - name: employee_id
+        tests: [not_null, unique]
+      - name: department_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_department')
+                field: department_id
+
+  - name: fact_project_performance
+    description: Project-level fact table for budget, schedule, task, labor cost, and milestone KPIs.
+    columns:
+      - name: project_id
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('dim_project')
+                field: project_id
+      - name: department_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_department')
+                field: department_id
+      - name: project_manager_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_employee')
+                field: employee_id
+
+  - name: fact_task_performance
+    description: Task-level fact table for planned versus actual hours and labor cost performance.
+    columns:
+      - name: task_id
+        tests: [not_null, unique]
+      - name: project_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_project')
+                field: project_id
+      - name: employee_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_employee')
+                field: employee_id
+
+  - name: mart_executive_summary
+    description: One-row executive KPI summary for dashboard headline cards.
+  - name: dim_date
+    description: Date dimension generated from project and milestone date ranges for Power BI time filtering.
+    columns:
+      - name: date_day
+        tests: [not_null, unique]
+      - name: year
+        tests: [not_null]
+      - name: year_month
+        tests: [not_null]

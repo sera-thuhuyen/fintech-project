@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: int_task_costs
+    description: Task-level planned and actual labor cost metrics by employee hourly rate.
+    columns:
+      - name: task_id
+        tests: [not_null, unique]
+      - name: project_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_projects')
+                field: project_id
+      - name: assigned_to_employee_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id
+
+  - name: int_project_task_summary
+    description: Project-level task workload, status, hours, and labor cost summary.
+    columns:
+      - name: project_id
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_projects')
+                field: project_id
+
+  - name: int_project_milestone_summary
+    description: Project-level milestone completion and delay summary.
+    columns:
+      - name: project_id
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_projects')
+                field: project_id
+
+  - name: int_project_performance
+    description: Project-level performance model combining budget, schedule, task, and milestone metrics.
+    columns:
+      - name: project_id
+        tests: [not_null, unique]
+      - name: department_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_departments')
+                field: department_id
+      - name: project_manager_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_employees')
+                field: employee_id

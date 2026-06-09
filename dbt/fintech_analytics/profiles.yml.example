@@ -1,0 +1,14 @@
+﻿fintech_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: ecommerce-project-498012
+      dataset: fintech_dbt
+      location: US
+      keyfile: ../../config/service-account.json
+      threads: 4
+      timeout_seconds: 300
+      priority: interactive
+      retries: 1

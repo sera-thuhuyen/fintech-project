@@ -1,0 +1,80 @@
+version: 2
+
+sources:
+  - name: fintech_raw
+    description: Raw fintech project management tables loaded from GCS CSV files into BigQuery.
+    database: ecommerce-project-498012
+    schema: fintech_raw
+    tables:
+      - name: projects
+        description: Raw project-level planning, budget, risk, and completion records.
+        columns:
+          - name: project_id
+            tests:
+              - not_null
+              - unique
+          - name: department_id
+            tests:
+              - not_null
+          - name: project_manager_id
+            tests:
+              - not_null
+      - name: tasks
+        description: Raw task-level work records assigned to employees and projects.
+        columns:
+          - name: task_id
+            tests:
+              - not_null
+              - unique
+          - name: project_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('fintech_raw', 'projects')
+                  field: project_id
+          - name: assigned_to_employee_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('fintech_raw', 'employees')
+                  field: employee_id
+      - name: milestones
+        description: Raw milestone-level planned and actual completion records.
+        columns:
+          - name: milestone_id
+            tests:
+              - not_null
+              - unique
+          - name: project_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('fintech_raw', 'projects')
+                  field: project_id
+      - name: employees
+        description: Raw employee dimension records including role, location, experience, and hourly rate.
+        columns:
+          - name: employee_id
+            tests:
+              - not_null
+              - unique
+          - name: department_id
+            tests:
+              - not_null
+              - relationships:
+                  to: source('fintech_raw', 'departments')
+                  field: department_id
+      - name: departments
+        description: Raw department lookup table.
+        columns:
+          - name: department_id
+            tests:
+              - not_null
+              - unique
+      - name: country_flags
+        description: Raw country flag lookup table.
+        columns:
+          - name: alpha_code
+            tests:
+              - not_null
+              - unique

@@ -254,7 +254,13 @@ config/*credential*
 dashboards/powerbi/*.tmp
 dashboards/powerbi/*.bak
 dashboards/powerbi/*~
+dashboards/powerbi/~$*
+~$*
 
 # OS/editor noise.
 .DS_Store
 Thumbs.db
+
+# Local editor and dbt user state.
+.vscode/
+dbt/**/.user.yml
